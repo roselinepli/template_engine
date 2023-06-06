@@ -1,0 +1,17 @@
+<p>Welcome, Charlie!</p>
+<p>Products:</p>
+<ul>
+    <li>Apple: $1.00</li>
+    <li>Fig: $1.50</li>
+    <li>Pomegranate: $3.25</li>
+</ul>
+
+
+<p>Welcome, {{user_name}}!</p>
+<p>Products:</p>
+<ul>
+{% for product in product_list %}
+    <li>{{ product.name}}:
+        {{ product.price|format_price}}</li>
+{% endfor %}
+</ul>
