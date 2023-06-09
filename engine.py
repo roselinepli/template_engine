@@ -95,43 +95,43 @@ class CodeBuilder(object):
                     # An if statement: evaluate the expression to determine if.
                     if len(words) != 2:
                         self._syntax_error("Don't understand if", token)
-                ops_stack.append('if')
-                code.add_line("if %s:" % self._expr_code(words[1]))
-                code.indent()
+                    ops_stack.append('if')
+                    code.add_line("if %s:" % self._expr_code(words[1]))
+                    code.indent()
 
-            elif words[0] == 'for':
-                # A loop: iterate over expression result.
-                if len(words) != 4 or words[2] != 'in':
-                    self._syntax_error("Don't understand for", token)
-                ops_stack.append('for')
-                self._variable(words[1], self.loop_vars)
-                code.add_line(
-                    "for c_%s in %s:" % (
-                        words[1],
-                        self._expr_code(words[3])
+                elif words[0] == 'for':
+                    # A loop: iterate over expression result.
+                    if len(words) != 4 or words[2] != 'in':
+                        self._syntax_error("Don't understand for", token)
+                    ops_stack.append('for')
+                    self._variable(words[1], self.loop_vars)
+                    code.add_line(
+                        "for c_%s in %s:" % (
+                            words[1],
+                            self._expr_code(words[3])
+                        )
                     )
-                )
-                code.indent()
+                    code.indent()
 
-            elif words[0].startswith('end'):
-                # Endsomething. Pop the ops stack.
-                if len(words) != 1:
-                    self._syntax_error("Don't usertand end", token)
-                end_what = words[0][3]
-                if not ops_stack:
-                    self._syntax_error("Too many ends", token)
-                start_what = ops_stack.pop()
-                if start_what != end_what:
-                    self._syntax_error("Mismatched end tag", end_what)
-                code.dedent()
+                elif words[0].startswith('end'):
+                    # Endsomething. Pop the ops stack.
+                    if len(words) != 1:
+                        self._syntax_error("Don't usertand end", token)
+                    end_what = words[0][3]
+                    if not ops_stack:
+                        self._syntax_error("Too many ends", token)
+                    start_what = ops_stack.pop()
+                    if start_what != end_what:
+                        self._syntax_error("Mismatched end tag", end_what)
+                    code.dedent()
+
+                else:
+                    self._syntax_error("Don't unsertand tag", words[0])
 
             else:
-                self._syntax_error("Don't unsertand tag", words[0])
-
-        else:
-            #Literal content. If it isn't empty, output it.
-            if token:
-                buffered.append(repr(token))
+                #Literal content. If it isn't empty, output it.
+                if token:
+                    buffered.append(repr(token))
 
         if ops_stack:
            self._sytax_error("Unmatached action tag", ops_stack[-1])
